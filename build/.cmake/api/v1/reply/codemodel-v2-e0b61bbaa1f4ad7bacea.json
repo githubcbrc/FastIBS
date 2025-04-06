@@ -1,0 +1,77 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.0.0"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2
+					]
+				}
+			],
+			"name" : "Release",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "OptIBS",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "KDBIntersect::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-KDBIntersect-Release-4b6292db279788b03c79.json",
+					"name" : "KDBIntersect",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "fastibs::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-fastibs-Release-cf579f6aeca63c2029c1.json",
+					"name" : "fastibs",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "fastibsmapper::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-fastibsmapper-Release-2594b1361c6330d08b5d.json",
+					"name" : "fastibsmapper",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/project/build",
+		"source" : "/project/src"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 0
+	}
+}
