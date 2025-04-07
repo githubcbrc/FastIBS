@@ -102,12 +102,35 @@ docker exec -it ${CONTAINER_NAME} bash
 
 ## 🧪 Using Singularity
 
-Once `fastibs.sif` is built, you can run FastIBS tools from the root folder as follows:
+Once `fastibs.sif` is built, you can test FastIBS tools have been properly installed as follows:
 
 ```bash
 singularity exec --bind .:/project fastibs.sif /project/bin/fastibs --help
 singularity exec --bind .:/project fastibs.sif /project/bin/fastibsmapper --help
 singularity exec --bind .:/project fastibs.sif /project/bin/KDBIntersect --help
+```
+
+If you want to use the tools do not forget to mount a data volume with a structure similar to the following:
+
+```bash
+FastIBSData/ # data volume root
+├── FastIBS_runs # results folder
+│   ├── ECOLI_v_ecoli_50000.tsv # fastibs result file
+│   ├── ECOLI_v_ecoli_genome.txt # fastibs mapper result file
+│   └── ECOLI_v_TA1675_50000.tsv
+├── kmc_sets # KMC database
+│   ├── BW_01002
+│   │   ├── BW_01002.res.kmc_pre
+│   │   └── BW_01002.res.kmc_suf
+│   ├── ECOLI
+│   │   ├── ecoli.res.kmc_pre
+│   │   └── ecoli.res.kmc_suf
+│   └── IG90747
+│       ├── IG90747.res.kmc_pre
+│       └── IG90747.res.kmc_suf
+└── reference # reference database
+    ├── ecoli_genome.fasta
+    └── TA1675_genome.fasta
 ```
 
 ## 🧹 Clean Build
