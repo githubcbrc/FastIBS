@@ -1,6 +1,8 @@
 *.bak
-data/*
-results/*
+data
+results
+build
+bin
 start_container.sh
 *.sif
 

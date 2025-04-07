@@ -1,1 +1,125 @@
-## FastIBS
+# FastIBS
+
+**FastIBS** is a high-performance toolkit for computing identity-by-state (IBS) distances and related genomic analyses. It leverages modern C++ backends and supports containerized environments through **Docker** and **Singularity**, making setup and deployment straightforward.
+
+---
+
+## 🚀 Installation Guide
+
+### ✅ Requirements
+
+- **Docker**
+- **Singularity** (for generating `.sif` images)
+- **Bash**
+
+> ⚠️ Note: You do *not* need to install CMake or Ninja on your host system — they are included in the Docker image.
+
+---
+
+### 🔧 Build & Install
+
+#### 1. Clone the repository
+
+```bash
+mkdir <project-folder>
+cd <project-folder>
+git clone https://github.com/githubcbrc/FastIBS.git .
+```
+
+### 2. (Optional) Edit Configuration
+
+Edit the `init/config.sh` file if you want to customize the Docker image and container names:
+
+```bash
+IMAGE_NAME=fastibs_img        # Docker image name  
+CONTAINER_NAME=fastibs_cont   # Docker container name
+```
+
+### 3. Run the Installer
+
+Run the installation script:
+
+```bash
+bash install.sh
+```
+
+This script performs the following steps:
+
+- Builds the Docker image
+- Starts the Docker container and mounts your project directory
+- Compiles the C++ binaries inside the container
+- Saves the Docker image as a `.tar` archive
+- Builds a Singularity `.sif` image from the `.tar` archive
+- Removes the intermediate `.tar` file
+
+
+## ⚙️ Project Structure
+
+project-root/
+│
+├── init/
+│   ├── config.sh           # Config variables (image/container names)
+│   └── Dockerfile          # Docker image setup
+│
+├── scripts/
+│   ├── build_img.sh        # Builds Docker image
+│   └── start_cont.sh       # Starts Docker container
+│
+├── src/                    # C++ source code
+│
+├── build/                  # CMake build directory (auto-generated)
+├── bin/                    # Compiled binaries (auto-generated)
+├── compile.sh              # CMake + Ninja build script
+└── install.sh              # Top-level installation script
+
+
+## 📦 Output Binaries
+
+After a successful build, the following executables will be available in `/project/bin`:
+
+- `fastibs`
+- `fastibsmapper`
+- `KDBIntersect`
+
+
+## 🐳 Using Docker
+
+To manually enter the running container:
+
+```bash
+docker exec -it <container_name> bash
+```
+
+Or, using variables from the config:
+
+```bash
+docker exec -it ${CONTAINER_NAME} bash
+```
+
+## 🧪 Using Singularity
+
+Once `fastibs.sif` is built, you can run FastIBS tools as follows:
+
+```bash
+singularity exec fastibs.sif /project/bin/fastibs --help
+```
+
+## 🧹 Clean Build
+
+To remove all build artifacts and recompile from scratch:
+
+```bash
+rm -rf build bin
+bash compile.sh
+```
+
+Or rerun the full installation pipeline:
+
+```bash
+bash install.sh
+```
+
+
+
+
+
