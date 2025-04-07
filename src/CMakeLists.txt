@@ -5,6 +5,11 @@ project(FastIBS VERSION 0.1.0)
 set(CMAKE_BUILD_TYPE Release)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++2a")
 
+# Ignore BOOST deprecated headers
+add_definitions("-DBOOST_ALLOW_DEPRECATED_HEADERS")
+add_definitions("-DBOOST_BIND_GLOBAL_PLACEHOLDERS")
+
+
 # Prefer pthread for Threads package
 set(THREADS_PREFER_PTHREAD_FLAG ON)
 

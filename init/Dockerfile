@@ -19,5 +19,5 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 # Create project directory and set it as working directory
-RUN mkdir -p /project
+RUN mkdir -p /project/data
 WORKDIR /project

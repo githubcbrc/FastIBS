@@ -1,7 +1,0 @@
-/project/build/CMakeFiles/edit_cache.dir
-/project/build/CMakeFiles/package_source.dir
-/project/build/CMakeFiles/rebuild_cache.dir
-/project/build/CMakeFiles/package.dir
-/project/build/CMakeFiles/KDBIntersect.dir
-/project/build/CMakeFiles/fastibsmapper.dir
-/project/build/CMakeFiles/fastibs.dir
