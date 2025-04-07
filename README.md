@@ -55,6 +55,7 @@ This script performs the following steps:
 
 ## ⚙️ Project Structure
 
+```
 project-root/
 │
 ├── init/
@@ -71,6 +72,8 @@ project-root/
 ├── bin/                    # Compiled binaries (auto-generated)
 ├── compile.sh              # CMake + Ninja build script
 └── install.sh              # Top-level installation script
+```
+
 
 
 ## 📦 Output Binaries
