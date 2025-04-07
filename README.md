@@ -96,15 +96,18 @@ docker exec -it <container_name> bash
 Or, using variables from the config:
 
 ```bash
+source init/config.sh
 docker exec -it ${CONTAINER_NAME} bash
 ```
 
 ## 🧪 Using Singularity
 
-Once `fastibs.sif` is built, you can run FastIBS tools as follows:
+Once `fastibs.sif` is built, you can run FastIBS tools from the root folder as follows:
 
 ```bash
-singularity exec fastibs.sif /project/bin/fastibs --help
+singularity exec --bind .:/project fastibs.sif /project/bin/fastibs --help
+singularity exec --bind .:/project fastibs.sif /project/bin/fastibsmapper --help
+singularity exec --bind .:/project fastibs.sif /project/bin/KDBIntersect --help
 ```
 
 ## 🧹 Clean Build
@@ -116,7 +119,7 @@ rm -rf build bin
 bash compile.sh
 ```
 
-Or rerun the full installation pipeline:
+Or re-run the full installation pipeline:
 
 ```bash
 bash install.sh
