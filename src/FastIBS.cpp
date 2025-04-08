@@ -49,7 +49,25 @@ int main(int argc, char *argv[])
     // Parse command line arguments
     if (argc != 5)
     {
-        cout << "Usage: " << argv[0] << " <sourcePath> <referencePath> <resultsFolder> <windowSize>\n";
+        cout << "\nFastIBS - IBS Distance Calculator\n"
+             << "----------------------------------\n"
+             << "Usage:\n"
+             << "  " << argv[0] << " <sourcePath> <referencePath> <resultsFolder> <windowSize>\n\n"
+             << "Arguments:\n"
+             << "  <sourcePath>     Path to folder with KMC datasets\n"
+             << "                   e.g., /mnt/data/kmc_sets\n\n"
+             << "  <referencePath>  Path to folder with reference genomes (FASTA/FASTQ)\n"
+             << "                   e.g., /mnt/data/reference\n\n"
+             << "  <resultsFolder>  Path to folder for storing output results\n"
+             << "                   e.g., /mnt/data/FastIBS_runs\n\n"
+             << "  <windowSize>     Length of the sequence window for IBS calculation\n"
+             << "                   (integer, e.g., 50000)\n\n"
+             << "Notes:\n"
+             << "  - All folders should be located on a mounted data volume.\n"
+             << "  - Reference files can be gzip-compressed.\n\n"
+             << "Output:\n"
+             << "  A tab-delimited file summarizing IBS distance metrics for each window.\n"
+             << "  Columns: seqname, start, end, total_kmers, observed_kmers, variations, kmer_distance\n\n";
         return 1;
     }
     else
