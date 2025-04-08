@@ -284,7 +284,7 @@ Example:
 
 ## Running on HPC Environments:
 
-A bash script `create_and_submit_jobs.sh` is provided as an example. This script is used to automate the generation and submission of multiple SLURM jobs based on a list of accessions. Each job will execute the FastIBS program with a specified window size for a given accession. Here's a breakdown of its functionality:
+A bash script `submit_jobs.sh` is provided as an example. This script is used to automate the generation and submission of multiple SLURM jobs based on a list of accessions. Each job will execute the FastIBS program with a specified window size for a given accession. Here's a breakdown of its functionality:
 
 ### 1. **Input Arguments**:
    - **`accessions_file`**: A text file containing a list of accession identifiers. Each accession corresponds to a KMC database and a separate job that will be processed.
