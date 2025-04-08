@@ -156,7 +156,7 @@ bash install.sh
 ## 📄 Output Format: IBS Distance Results
 
 
-Running fastibs without options or with the --help options:
+Running the **fastibs** binary without options or with the `--help` option:
 ```bash
 singularity exec --bind .:/project fastibs.sif /project/bin/fastibs --help
 ```
@@ -170,10 +170,10 @@ Usage:
   /project/bin/fastibs <sourcePath> <referencePath> <resultsFolder> <windowSize>
 
 Arguments:
-  <sourcePath>     Path to folder with KMC datasets
-                   e.g., /mnt/data/kmc_sets
+  <sourcePath>     Path to folder with KMC dataset
+                   e.g., /mnt/data/kmc_sets/BW_01002
 
-  <referencePath>  Path to folder with reference genomes (FASTA/FASTQ)
+  <referencePath>  Path to folder with reference genomes (FASTA)
                    e.g., /mnt/data/reference
 
   <resultsFolder>  Path to folder for storing output results
@@ -191,8 +191,8 @@ Output:
   Columns: seqname, start, end, total_kmers, observed_kmers, variations, kmer_distance
 ```
 
-
-The output of **FastIBS** is a tab-delimited table with the following columns:
+Provided a KMC database at `<sourcePath>` , **fastibs** computes IBS distance reports against all references in `<referencePath>`. 
+The output of **fastibs** is a tab-delimited table with the following columns:
 
 | **Column Name**     | **Description**                                                                 |
 |---------------------|---------------------------------------------------------------------------------|
@@ -204,6 +204,79 @@ The output of **FastIBS** is a tab-delimited table with the following columns:
 | `variations`        | Number of variant sites (positions where the reference and sample differ within the window). |
 | `kmer_distance`     | Computed IBS distance metric, often reflecting the number of unique k-mers in the reference that are absent from the sample (or vice versa). |
 
+
+## Mapping a KMC database to reference sequences
+
+This tool computes a K-mer mapping for the given references, where each nucleotide position in the reference sequences is associated with a count of how many K-mers (of a fixed size, defined by the kmerSize of the KMC source) overlap that position and exist in the source KMC database.
+
+A quick and easy k-mer mapping can be used to detect regions of high conservation/divergence from a given reference. Even though a KMC database does not retain positional information and only records k-mers and their frequencies from reads, the probability of false positives is small as long as sufficiently long k-mers are used (we use a default of 31 for kmerSize).
+
+
+Running the **fastibsmapper** binary without options or with the `--help` option:
+```bash
+singularity exec --bind .:/project fastibs.sif /project/bin/fastibsmapper --help
+```
+
+prints the following.
+
+```bash
+FastIBS - Reference Mapping Tool
+---------------------------------
+Usage:
+  /project/bin/fastibsmapper <sourcePath> <referencePath> <resultsFolder>
+
+Arguments:
+  <sourcePath>     Path to folder containing KMC database files
+                   (e.g., /mnt/data/kmc_sets/<dataset_name>)
+
+  <referencePath>  Path to folder containing reference genomes in FASTA format
+                   (e.g., /mnt/data/reference)
+
+  <resultsFolder>  Destination folder for writing mapping result files
+                   (e.g., /mnt/data/FastIBS_runs)
+
+Notes:
+  - All input folders should reside on a mounted data volume.
+  - The tool scans <referencePath> for .fasta files and processes them against the KMC base.
+  - Output filenames follow the format: <KMC_prefix>_v_<reference_stem>.txt
+  - Existing output files will be skipped.
+  - Errors during processing are logged to log.txt.
+
+Example:
+  /project/bin/fastibsmapper /mnt/data/kmc_sets/sample1 /mnt/data/reference /mnt/data/FastIBS_runs
+
+Output: This tool computes a K-mer mapping for the given references, where each nucleotide position in the reference sequences is associated with a count of how many K-mers (of a fixed size, defined by the kmerSize of the KMC source) overlap that position and exist in the source KMC database.
+```
+
+## Intersection Size Tool
+
+```bash
+K-mer Database Intersection Size Tool
+----------------------------------
+Usage:
+  /project/bin/KDBIntersect <kDB1Path> <kDB2Path>
+
+Arguments:
+  <kDB1Path>     Path to the first KMC database directory
+                 (e.g., /mnt/data/kmc_sets/db1)
+
+  <kDB2Path>     Path to the second KMC database directory
+                 (e.g., /mnt/data/kmc_sets/db2)
+
+Description:
+  This tool computes the intersection size between two KMC databases, i.e.,
+  how many k-mers from the first database are present in the second.
+
+Notes:
+  - The databases must have the same k-mer size.
+  - The tool compares the two KMC databases, choosing the smaller database
+    for random access to optimize performance.
+  - The intersection size is output as an integer, which represents the
+    number of common k-mers between the two databases.
+
+Example:
+  /project/bin/KDBIntersect /mnt/data/kmc_sets/db1 /mnt/data/kmc_sets/db2
+```
 
 
 

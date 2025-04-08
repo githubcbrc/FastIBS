@@ -43,9 +43,29 @@ int main(int argc, char *argv[])
     string kDB1Path, kDB2Path, database1, database2;
     if (argc != 3)
     {
-        cout << "Usage: " << argv[0] << " <kDB1Path> <kDB2Path>\n";
+        cout << "\nK-mer Database Intersection Tool\n"
+             << "----------------------------------\n"
+             << "Usage:\n"
+             << "  " << argv[0] << " <kDB1Path> <kDB2Path>\n\n"
+             << "Arguments:\n"
+             << "  <kDB1Path>     Path to the first KMC database directory\n"
+             << "                 (e.g., /mnt/data/kmc_sets/db1)\n\n"
+             << "  <kDB2Path>     Path to the second KMC database directory\n"
+             << "                 (e.g., /mnt/data/kmc_sets/db2)\n\n"
+             << "Description:\n"
+             << "  This tool computes the intersection size between two KMC databases, i.e.,\n"
+             << "  how many k-mers from the first database are present in the second.\n\n"
+             << "Notes:\n"
+             << "  - The databases must have the same k-mer size.\n"
+             << "  - The tool compares the two KMC databases, choosing the smaller database\n"
+             << "    for random access to optimize performance.\n"
+             << "  - The intersection size is output as an integer, which represents the\n"
+             << "    number of common k-mers between the two databases.\n\n"
+             << "Example:\n"
+             << "  " << argv[0] << " /mnt/data/kmc_sets/db1 /mnt/data/kmc_sets/db2\n\n";
         return 1;
     }
+
     else
     {
         kDB1Path = argv[1];

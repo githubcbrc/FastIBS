@@ -33,10 +33,30 @@ int main(int argc, char *argv[])
 {
     string sourcePath, referencePath, resultsFolder, database;
 
-    // Parse command line arguments
     if (argc != 4)
     {
-        cout << "Usage: " << argv[0] << " <sourcePath(KMC)> <referencePath(fasta)> <resultsFolder>\n";
+        cout << "\nFastIBS - Reference Mapping Tool\n"
+             << "---------------------------------\n"
+             << "Usage:\n"
+             << "  " << argv[0] << " <sourcePath> <referencePath> <resultsFolder>\n\n"
+             << "Arguments:\n"
+             << "  <sourcePath>     Path to folder containing KMC database files\n"
+             << "                   (e.g., /mnt/data/kmc_sets/<dataset_name>)\n\n"
+             << "  <referencePath>  Path to folder containing reference genomes in FASTA format\n"
+             << "                   (e.g., /mnt/data/reference)\n\n"
+             << "  <resultsFolder>  Destination folder for writing mapping result files\n"
+             << "                   (e.g., /mnt/data/FastIBS_runs)\n\n"
+             << "Notes:\n"
+             << "  - All input folders should reside on a mounted data volume.\n"
+             << "  - The tool scans <referencePath> for .fasta files and processes them against the KMC base.\n"
+             << "  - Output filenames follow the format: <KMC_prefix>_v_<reference_stem>.txt\n"
+             << "  - Existing output files will be skipped.\n"
+             << "  - Errors during processing are logged to log.txt.\n\n"
+             << "Example:\n"
+             << "  " << argv[0] << " /mnt/data/kmc_sets/sample1 /mnt/data/reference /mnt/data/FastIBS_runs\n\n"
+             << "Output: This tool computes a K-mer mapping for the given references, where each nucleotide position in the reference "
+             << "sequences is associated with a count of how many K-mers (of a fixed size, defined by the kmerSize of the KMC source) "
+             << "overlap that position and exist in the source KMC database.\n";
         return 1;
     }
     else
