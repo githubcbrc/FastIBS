@@ -1,6 +1,10 @@
 # FastIBS
 
-**FastIBS** is a high-performance toolkit for computing identity-by-state (IBS) distances and related genomic analyses. It leverages modern C++ backends and supports containerized environments through **Docker** and **Singularity**, making setup and deployment straightforward.
+**FastIBS** is a high-performance toolkit for computing identity-by-state (IBS) distances and related genomic analyses. Built with an optimized C++ backend, it supports containerized deployment through **Docker** and **Singularity**, ensuring easy setup and portability across environments, especially as most analyses of this type are commonly performed on HPC enviroments.
+
+FastIBS leverages the **KMC API** to implement IBS distance computation in a manner closely aligned with IBSpy. However, unlike IBSpy, which suffers from significant memory bottlenecks that hinder parallelism, FastIBS provides a highly efficient and scalable C++ implementation. Our intial benchmarks show that FastIBS can deliver over **100× speed-up** compared to the base IBSpy pipeline, depending on underlying hardware and level of parallelism.
+
+FastIBS is built on top of [**KMC**](https://github.com/refresh-bio/KMC), a high-performance API for counting k-mers from FASTQ or FASTA files, including gzipped formats. The KMC API enables efficient access to k-mer databases, forming the computational backbone of FastIBS.
 
 ---
 
@@ -114,11 +118,11 @@ If you want to use the tools do not forget to mount a data volume with a structu
 
 ```bash
 FastIBSData/ # data volume root
-├── FastIBS_runs # results folder
+├── FastIBS_runs # results folder (initially empty)
 │   ├── ECOLI_v_ecoli_50000.tsv # fastibs result file
 │   ├── ECOLI_v_ecoli_genome.txt # fastibs mapper result file
 │   └── ECOLI_v_TA1675_50000.tsv
-├── kmc_sets # KMC database
+├── kmc_sets # KMC database (A path to your KMC KBs)
 │   ├── BW_01002
 │   │   ├── BW_01002.res.kmc_pre
 │   │   └── BW_01002.res.kmc_suf
