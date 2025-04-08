@@ -205,9 +205,9 @@ The output of **fastibs** is a tab-delimited table with the following columns:
 | `kmer_distance`     | Computed IBS distance metric, often reflecting the number of unique k-mers in the reference that are absent from the sample (or vice versa). |
 
 
-## Mapping a KMC database to reference sequences
+## KDB Reference Mapping
 
-This tool computes a K-mer mapping for the given references, where each nucleotide position in the reference sequences is associated with a count of how many K-mers (of a fixed size, defined by the kmerSize of the KMC source) overlap that position and exist in the source KMC database.
+**fastibsmapper** computes a K-mer mapping of a given KMC base against given references, where each nucleotide position in the reference sequences is associated with a count of how many K-mers (of a fixed size, defined by the kmerSize of the KMC source) overlap that position and exist in the source KMC database.
 
 A quick and easy k-mer mapping can be used to detect regions of high conservation/divergence from a given reference. Even though a KMC database does not retain positional information and only records k-mers and their frequencies from reads, the probability of false positives is small as long as sufficiently long k-mers are used (we use a default of 31 for kmerSize).
 
@@ -248,7 +248,9 @@ Example:
 Output: This tool computes a K-mer mapping for the given references, where each nucleotide position in the reference sequences is associated with a count of how many K-mers (of a fixed size, defined by the kmerSize of the KMC source) overlap that position and exist in the source KMC database.
 ```
 
-## Intersection Size Tool
+## KDB Intersection Size Tool
+
+This is a simple wrapper around the same KMC API functionality.
 
 ```bash
 K-mer Database Intersection Size Tool
@@ -280,4 +282,72 @@ Example:
 
 
 
+## Running on HPC Environments:
+
+A bash script `create_and_submit_jobs.sh` is provided as an example. This script is used to automate the generation and submission of multiple SLURM jobs based on a list of accessions. Each job will execute the FastIBS program with a specified window size for a given accession. Here's a breakdown of its functionality:
+
+### 1. **Input Arguments**:
+   - **`accessions_file`**: A text file containing a list of accession identifiers. Each accession corresponds to a KMC database and a separate job that will be processed.
+   - **`data_path`**: The path to the directory containing the required data for the FastIBS program. This is typically the data associated with the accessions, including as detailed earlier folders for `kmc_sets`, `reference`, and possibly `results`
+   - **`window_size`**: The window size parameter that will be passed to the FastIBS program. This specifies the size of the sequence windows used for calculating IBS (Identity by State) distances.
+
+### 2. **Functionality**:
+   - The script first checks if the correct number of arguments is provided.
+   - It checks if the provided accessions file exists and is readable.
+   - For each accession listed in the file, a SLURM job script is dynamically generated. This job script sets job parameters, such as memory allocation, CPU cores, and runtime limits. It also calls the `run.sh` script to process the FastIBS program for that particular accession.
+   - Once the job script is generated for each accession, the script can be configured to submit each job to the SLURM job scheduler for parallel execution. (The submission line is currently commented out for safety, but can be enabled by uncommenting the line `sbatch $job_script`.)
+
+```bash
+# Loop over each accession in the file
+while IFS= read -r accession
+do
+    # Generate a SLURM job script
+    job_script="job_${accession}.sh"
+    cat << EOF > $job_script
+#!/bin/bash
+#SBATCH --exclusive
+#SBATCH --job-name=FastIBS_${accession}
+#SBATCH --output=FastIBS_${accession}.out
+#SBATCH --error=FastIBS_${accession}.err
+#SBATCH --time=24:00:00
+#SBATCH --mem=256G
+#SBATCH --cpus-per-task=50
+bash run.sh ${accession} ${data_path} ${window_size}
+EOF
+
+    # Submit the job - uncomment below to submit
+    #sbatch $job_script
+done < "$accessions_file"
+```
+
+### 3. **Job Configuration**:
+   - Each SLURM job is given unique names for job output and error logs (`FastIBS_${accession}.out` and `FastIBS_${accession}.err`).
+   - Resources are allocated based on the job requirements: 24 hours of runtime, 256GB of memory, and 50 CPUs per task. Change these according to your requirements.
+   - Jobs are submitted in parallel, each handling a different accession, speeding up processing for large datasets.
+   - The `thread_pool` library is utilized to efficiently parallelize the processing of each reference sequence. This is achieved by breaking the reference into smaller chunks, each of which is processed in parallel. Each chunk corresponds to a window of the sequence, and the parallelization improves the processing speed for large references.
+
+```bash
+        cout << "Calculating stats" << endl;
+        vector<Window> statsResult(chunks.size());
+        thread_pool pool;
+        boost::progress_display progressBar(chunks.size());
+        for (size_t i = 0; i < chunks.size(); i++)
+        {
+            pool.push_task([i, this, &chunks, &statsResult, &progressBar]
+                           {
+                            statsResult[i] = getStatsFromSequence(chunks[i]);
+                            ++progressBar; });
+        }
+        pool.wait_for_tasks();
+        cout << endl;
+```
+
+
+
+### Example Use Case:
+To run multiple FastIBS jobs in parallel, assuming you have a list of accessions (`accessions.txt`), data directory (`./FastIBSData/`), and a desired window size of 50,000:
+
+```bash
+bash submit_jobs.sh accessions.txt ./FastIBSData/ 50000
+```
 
