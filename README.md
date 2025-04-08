@@ -326,7 +326,7 @@ done < "$accessions_file"
    - Jobs are submitted in parallel, each handling a different accession, speeding up processing for large datasets.
    - The `thread_pool` library is utilized to efficiently parallelize the processing of each reference sequence. This is achieved by breaking the reference into smaller chunks, each of which is processed in parallel. Each chunk corresponds to a window of the sequence, and the parallelization improves the processing speed for large references.
 
-```bash
+```cpp
         cout << "Calculating stats" << endl;
         vector<Window> statsResult(chunks.size());
         thread_pool pool;
